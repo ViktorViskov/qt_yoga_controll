@@ -8,6 +8,7 @@ from widget import Widget
 class Tray(QSystemTrayIcon):
     # varaibles
     app: QApplication
+    pos: QPoint = None
 
     # widgets
     menu: QMenu
@@ -47,10 +48,13 @@ class Tray(QSystemTrayIcon):
         if key_event == 3:
             # check for window is show
             if not self.window:
-                self.window = Widget()
+                if not self.pos: 
+                    self.pos = QCursor.pos()
+                self.window = Widget(self)
                 self.window.show()
                 self.window.closeEvent = lambda event: self.show_status(3)
             else:
+                self.pos = self.window.pos()
                 self.window.closeEvent = None
                 self.window.close()
                 self.window = None

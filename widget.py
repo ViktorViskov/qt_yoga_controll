@@ -5,15 +5,20 @@ from PyQt5.QtWidgets import *
 class Widget(QWidget):
     app: QApplication
     # layout: QVBoxLayout
-    label: QLabel
+    label: QPushButton
+    mousepos = QCursor.pos()
 
-    def __init__(self) -> None:
+    def __init__(self, parent) -> None:
         super().__init__()
-        
+        self.parent = parent
+        sad = QPixmap()
+        QS
         self.layout = QVBoxLayout(self)
-        self.label = QLabel("Hello")
+        self.label = QPushButton("Print")
+        self.label.mousePressEvent = lambda event: print(self.parent.pos)
         self.layout.addWidget(self.label)
-        self.move(QCursor.pos())
-        self.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.FramelessWindowHint)
-        self.setFixedSize(300,100)
+        self.move(self.parent.pos)
+        self.setWindowFlags(Qt.WindowType.SplashScreen | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint)
+
+
 
