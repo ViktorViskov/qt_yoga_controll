@@ -1,24 +1,32 @@
+from random import random
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from icon import custom_icon
 
 class Widget(QWidget):
     app: QApplication
-    # layout: QVBoxLayout
-    label: QPushButton
+    layout: QVBoxLayout
+    button: QPushButton
+    label: QLabel
     mousepos = QCursor.pos()
 
     def __init__(self, parent) -> None:
         super().__init__()
         self.parent = parent
-        sad = QPixmap()
-        QS
         self.layout = QVBoxLayout(self)
-        self.label = QPushButton("Print")
-        self.label.mousePressEvent = lambda event: print(self.parent.pos)
-        self.layout.addWidget(self.label)
-        self.move(self.parent.pos)
+
+        self.button = QPushButton("Print")
+        self.button.mousePressEvent = lambda event: self.change_label()
+        self.layout.addWidget(self.button)
+
+        # self.move(self.parent.pos)
         self.setWindowFlags(Qt.WindowType.SplashScreen | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint)
+
+
+    def change_label(self):
+        number = str(int(random() * 1000))
+        self.parent.setIcon(custom_icon("INT",number))
 
 
 

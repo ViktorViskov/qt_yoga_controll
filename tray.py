@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from widget import Widget
+from icon import custom_icon
 
 # main class for tray app
 class Tray(QSystemTrayIcon):
@@ -22,7 +23,7 @@ class Tray(QSystemTrayIcon):
         self.app = app
 
         # config tray icon
-        self.setIcon(QIcon("status.png"))
+        self.setIcon(custom_icon("ICO", "sUb"))
         self.setVisible(True)
 
         # create menu
@@ -58,6 +59,9 @@ class Tray(QSystemTrayIcon):
                 self.window.closeEvent = None
                 self.window.close()
                 self.window = None
+        
+        elif key_event == 4:
+            self.app.quit()
 
 
 

@@ -9,6 +9,8 @@ app.setQuitOnLastWindowClosed(False)
   
 # creating tray
 tray = Tray(app)
+tray1 = Tray(app)
+tray2 = Tray(app)
   
 # Adding options to the System Tray
 app.exec_()
