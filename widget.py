@@ -1,8 +1,8 @@
 from random import random
+from os import popen
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from icon import custom_icon
 
 class Widget(QWidget):
     app: QApplication
@@ -26,7 +26,7 @@ class Widget(QWidget):
 
     def change_label(self):
         number = str(int(random() * 1000))
-        self.parent.setIcon(custom_icon("INT",number))
+        result = popen("upower -i /org/freedesktop/UPower/devices/DisplayDevice | awk '/percentage/' | awk '{print $2}'").read()
 
 
 

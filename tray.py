@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from widget import Widget
-from icon import custom_icon
+from icon import batt_icon, batt_worker
 
 # main class for tray app
 class Tray(QSystemTrayIcon):
@@ -22,8 +22,13 @@ class Tray(QSystemTrayIcon):
         super().__init__()
         self.app = app
 
-        # config tray icon
-        self.setIcon(custom_icon("ICO", "sUb"))
+        # config tray icon and create worker
+        self.setIcon(batt_icon("0"))
+        b_worker = batt_worker(self)
+        b_worker.out.connect(lambda out: self.setIcon(batt_icon(out)))
+        b_worker.start()
+
+
         self.setVisible(True)
 
         # create menu
@@ -62,7 +67,3 @@ class Tray(QSystemTrayIcon):
         
         elif key_event == 4:
             self.app.quit()
-
-
-
-
