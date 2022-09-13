@@ -16,6 +16,7 @@ class batt_worker(QThread):
       while True:
         # Get time, date and day
         result = popen("upower -i /org/freedesktop/UPower/devices/DisplayDevice | awk '/percentage/' | awk '{print $2}'").read().strip()
+        # result = open("/sys/class/power_supply/BAT1/capacity", "r").read()
 
         # check for result is exist
         if result:
@@ -25,7 +26,7 @@ class batt_worker(QThread):
 
         # send signal
         self.out.emit(result)
-        sleep(1)
+        sleep(5)
 
 class batt_icon(QIcon):
     def __init__(self, bat_status:str) -> None:
@@ -33,14 +34,13 @@ class batt_icon(QIcon):
 
         # preparing
         pixmap = QPixmap(128, 128)
-        pixmap.fill(QColor(0,0,0,0))
+        pixmap.fill(QColor(0,0,0,255))
 
         # painter
         painter = QPainter(pixmap)
 
         # define color for paint
         number = int(bat_status)
-
         if number <= 10:
             color = QColor(127,0,0,255)
         elif number <= 20:
@@ -58,35 +58,28 @@ class batt_icon(QIcon):
         painter.setPen(pen)
 
         # battery body
-        painter.drawRoundedRect(2,32,123,64, 8, 8)
-        painter.drawLine(507,220,507, 280)
+        painter.drawRoundedRect(2,32,119,64, 8, 8)
+        painter.drawLine(126,50,126, 78)
 
-        # painter.drawRect(0,43,128,43)
-        # pen.setWidth(50)
-        # painter.setPen(pen)
+        # fill battery
+        painter.fillRect(4,34,round(1.15 * number),60, color)
 
+        # write percents
+        pen.setColor(QColor("white"))
+        painter.setPen(pen)
+        painter.setFont( QFont("Liberation Mono", 40, 70) )
 
-        # fill
-        # painter.fillRect(30,110,4.38 * number,292, color)
-        # painter.drawR
+        # for 1 char
+        if len(bat_status) == 1:
+            painter.drawText( QPoint(44, 82), bat_status)
 
+        if len(bat_status) == 2:
+            # for 2 char
+            painter.drawText( QPoint(25, 82), bat_status)
 
-        # title
-        # pen.setColor(QColor("white"))
-        # painter.setPen(pen)
-        # painter.setFont( QFont("Liberation Mono", 170, 70) )
-
-        # # for 1 char
-        # if len(bat_status) == 1:
-        #     painter.drawText( QPoint(170, 330), bat_status)
-
-        # if len(bat_status) == 2:
-        #     # for 2 char
-        #     painter.drawText( QPoint(100, 330), bat_status)
-
-        # if len(bat_status) == 3:
-        #     # for 3 chars
-        #     painter.drawText( QPoint(35, 330), bat_status)
+        if len(bat_status) == 3:
+            # for 3 chars
+            painter.drawText( QPoint(9, 82), bat_status)
         
 
         # stop drawing
