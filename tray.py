@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from widget import Widget
-from icon import batt_icon, batt_worker
+from batt_icon import batt_icon, batt_worker
 
 # main class for tray app
 class Tray(QSystemTrayIcon):
