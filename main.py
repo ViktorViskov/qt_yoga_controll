@@ -1,14 +1,13 @@
-from inspect import trace
+from batt_tray import batt_tray
 from PyQt5.QtGui import * 
 from PyQt5.QtWidgets import * 
-from tray import Tray
   
 # creating app
 app = QApplication([])
 app.setQuitOnLastWindowClosed(False)
   
-# creating tray
-tray = Tray(app)
+# creating tray icons
+battery = batt_tray(app)
   
 # Adding options to the System Tray
 app.exec_()

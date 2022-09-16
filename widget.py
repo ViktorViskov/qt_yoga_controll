@@ -12,15 +12,21 @@ class Widget(QWidget):
     mousepos = QCursor.pos()
 
     def __init__(self, parent) -> None:
+        # init widget
         super().__init__()
+        self.setFixedSize(300,200)
+
         self.parent = parent
         self.layout = QVBoxLayout(self)
+
 
         self.button = QPushButton("Print")
         self.button.mousePressEvent = lambda event: self.change_label()
         self.layout.addWidget(self.button)
 
-        # self.move(self.parent.pos)
+        # if exist saved position, move to this position
+        if self.parent.pos:
+            self.move(self.parent.pos)
         self.setWindowFlags(Qt.WindowType.SplashScreen | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint)
 
 
