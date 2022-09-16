@@ -2,7 +2,6 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from widget import Widget
 from time import sleep
 from os import popen
 from os.path import exists
@@ -111,6 +110,45 @@ class batt_icon(QIcon):
         painter.end()
         self.addPixmap(pixmap)
 
+class batt_window(QWidget):
+    app: QApplication
+    layout: QVBoxLayout
+    button: QPushButton
+    label: QLabel
+    mousepos = QCursor.pos()
+
+    def __init__(self, parent) -> None:
+        # init widget
+        super().__init__()
+        self.setFixedSize(300,200)
+
+        self.parent = parent
+        self.layout = QVBoxLayout(self)
+
+        # label with description
+        self.description = QLabel("Path to battery \nExample /sys/class/power_supply/BAT1/")
+        self.layout.addWidget(self.description)
+
+        # input field
+        self.input_field = QLineEdit()
+        self.input_field.setText("/sys/class/power_supply/BAT1/")
+        self.layout.addWidget(self.input_field)
+
+        # save button
+        self.button = QPushButton("Save")
+        self.button.mousePressEvent = lambda event: print(self.input_field.text())
+        self.layout.addWidget(self.button)
+
+        # if exist saved position, move to this position
+        # if self.parent.pos:
+            # self.move(self.parent.pos)
+        # self.setWindowFlags(Qt.WindowType.SplashScreen | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint)
+        self.setWindowFlags(  Qt.WindowType.Dialog)
+
+
+    def change_label(self):
+        result = popen("upower -i /org/freedesktop/UPower/devices/DisplayDevice | awk '/percentage/' | awk '{print $2}'").read()
+
 # main class for tray app
 class batt_tray(QSystemTrayIcon):
     # varaibles
@@ -121,7 +159,7 @@ class batt_tray(QSystemTrayIcon):
 
     # widgets
     menu: QMenu
-    window: Widget = None
+    window: batt_window = None
 
     # actions
     exit: QAction
@@ -167,7 +205,7 @@ class batt_tray(QSystemTrayIcon):
                     pass
                 #     window_size = QDesktopWidget().screenGeometry()
                 #     self.pos = QPoint(window_size.width() - (window_size.width() - 300),window_size.height() - (window_size.height() - 100))
-                self.window = Widget(self)
+                self.window = batt_window(self)
                 self.window.show()
                 self.window.closeEvent = lambda event: self.show_status(3)
             else:
