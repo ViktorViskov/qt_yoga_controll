@@ -244,7 +244,7 @@ class batt_tray(QSystemTrayIcon):
             out = popen("upower -i /org/freedesktop/UPower/devices/DisplayDevice | awk '/time to /'").read().strip().capitalize().split(":")
 
             # message preparing
-            if out:
+            if len(out) > 1 :
                 message = "%s: %s" % (out[0].strip(),out[1].strip())
             else:
                 message = "Can not read data about battery"
